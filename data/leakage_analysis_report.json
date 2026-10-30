@@ -1,0 +1,13 @@
+{
+  "dev_image_count": 88,
+  "eval_image_count": 22,
+  "exact_sha256_duplicates_count": 0,
+  "exact_duplicates": [],
+  "perceptual_near_duplicates_count": 0,
+  "near_duplicates": [],
+  "min_hamming_distance_bits": 13,
+  "mean_nearest_hamming_distance_bits": 17.77,
+  "shared_base_ids_count": 0,
+  "shared_base_ids": [],
+  "verdict": "NO_LEAKAGE"
+}

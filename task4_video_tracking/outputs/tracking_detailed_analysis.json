@@ -1,0 +1,320 @@
+{
+  "total_unique_tracks": 29,
+  "total_confirmed_tracks": 24,
+  "total_detection_records": 1853,
+  "video_total_frames": 1440,
+  "video_fps": 24.0,
+  "video_duration_seconds": 60.0,
+  "processing_speed_fps": 53.14,
+  "processing_time_seconds": 27.1,
+  "track_duration_frames": {
+    "mean": 72.28,
+    "median": 30.0,
+    "std": 91.71,
+    "min": 1,
+    "max": 432
+  },
+  "track_duration_seconds": {
+    "mean": 3.01,
+    "median": 1.25,
+    "max": 18.0
+  },
+  "fragmentation_analysis": {
+    "physical_objects_in_scene": "2 to 4 eggs (1 raw egg, 1 hard-boiled egg primarily tested)",
+    "root_cause_for_29_tracks": "Track fragmentation caused by hand interactions during spinning and motion blur. When the presenter touches, spins, or stops an egg with their fingers, the egg is occluded or distorted, dropping detections for >15 frames. Upon release, the tracker instantiates a new track ID.",
+    "tracks_under_30_frames": 14,
+    "tracks_over_100_frames": 8
+  },
+  "individual_tracks": [
+    {
+      "track_id": 1,
+      "first_frame": 1,
+      "last_frame": 211,
+      "duration_frames": 211,
+      "duration_seconds": 8.79,
+      "hit_count": 211,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 2,
+      "first_frame": 212,
+      "last_frame": 307,
+      "duration_frames": 96,
+      "duration_seconds": 4.0,
+      "hit_count": 96,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 3,
+      "first_frame": 222,
+      "last_frame": 305,
+      "duration_frames": 84,
+      "duration_seconds": 3.5,
+      "hit_count": 84,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 4,
+      "first_frame": 311,
+      "last_frame": 360,
+      "duration_frames": 50,
+      "duration_seconds": 2.08,
+      "hit_count": 29,
+      "hit_ratio": 0.58,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 5,
+      "first_frame": 359,
+      "last_frame": 360,
+      "duration_frames": 2,
+      "duration_seconds": 0.08,
+      "hit_count": 2,
+      "hit_ratio": 1.0,
+      "is_confirmed": false
+    },
+    {
+      "track_id": 6,
+      "first_frame": 366,
+      "last_frame": 512,
+      "duration_frames": 147,
+      "duration_seconds": 6.12,
+      "hit_count": 147,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 7,
+      "first_frame": 369,
+      "last_frame": 393,
+      "duration_frames": 25,
+      "duration_seconds": 1.04,
+      "hit_count": 25,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 8,
+      "first_frame": 431,
+      "last_frame": 510,
+      "duration_frames": 80,
+      "duration_seconds": 3.33,
+      "hit_count": 45,
+      "hit_ratio": 0.562,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 9,
+      "first_frame": 501,
+      "last_frame": 510,
+      "duration_frames": 10,
+      "duration_seconds": 0.42,
+      "hit_count": 9,
+      "hit_ratio": 0.9,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 10,
+      "first_frame": 516,
+      "last_frame": 680,
+      "duration_frames": 165,
+      "duration_seconds": 6.88,
+      "hit_count": 132,
+      "hit_ratio": 0.8,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 11,
+      "first_frame": 575,
+      "last_frame": 575,
+      "duration_frames": 1,
+      "duration_seconds": 0.04,
+      "hit_count": 1,
+      "hit_ratio": 1.0,
+      "is_confirmed": false
+    },
+    {
+      "track_id": 12,
+      "first_frame": 614,
+      "last_frame": 614,
+      "duration_frames": 1,
+      "duration_seconds": 0.04,
+      "hit_count": 1,
+      "hit_ratio": 1.0,
+      "is_confirmed": false
+    },
+    {
+      "track_id": 13,
+      "first_frame": 614,
+      "last_frame": 639,
+      "duration_frames": 26,
+      "duration_seconds": 1.08,
+      "hit_count": 6,
+      "hit_ratio": 0.231,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 14,
+      "first_frame": 681,
+      "last_frame": 687,
+      "duration_frames": 7,
+      "duration_seconds": 0.29,
+      "hit_count": 6,
+      "hit_ratio": 0.857,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 15,
+      "first_frame": 681,
+      "last_frame": 687,
+      "duration_frames": 7,
+      "duration_seconds": 0.29,
+      "hit_count": 6,
+      "hit_ratio": 0.857,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 16,
+      "first_frame": 688,
+      "last_frame": 722,
+      "duration_frames": 35,
+      "duration_seconds": 1.46,
+      "hit_count": 35,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 17,
+      "first_frame": 721,
+      "last_frame": 748,
+      "duration_frames": 28,
+      "duration_seconds": 1.17,
+      "hit_count": 28,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 18,
+      "first_frame": 722,
+      "last_frame": 748,
+      "duration_frames": 27,
+      "duration_seconds": 1.12,
+      "hit_count": 27,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 19,
+      "first_frame": 749,
+      "last_frame": 856,
+      "duration_frames": 108,
+      "duration_seconds": 4.5,
+      "hit_count": 82,
+      "hit_ratio": 0.759,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 20,
+      "first_frame": 814,
+      "last_frame": 814,
+      "duration_frames": 1,
+      "duration_seconds": 0.04,
+      "hit_count": 1,
+      "hit_ratio": 1.0,
+      "is_confirmed": false
+    },
+    {
+      "track_id": 21,
+      "first_frame": 814,
+      "last_frame": 851,
+      "duration_frames": 38,
+      "duration_seconds": 1.58,
+      "hit_count": 18,
+      "hit_ratio": 0.474,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 22,
+      "first_frame": 819,
+      "last_frame": 983,
+      "duration_frames": 165,
+      "duration_seconds": 6.88,
+      "hit_count": 165,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 23,
+      "first_frame": 822,
+      "last_frame": 851,
+      "duration_frames": 30,
+      "duration_seconds": 1.25,
+      "hit_count": 17,
+      "hit_ratio": 0.567,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 24,
+      "first_frame": 834,
+      "last_frame": 1008,
+      "duration_frames": 175,
+      "duration_seconds": 7.29,
+      "hit_count": 152,
+      "hit_ratio": 0.869,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 25,
+      "first_frame": 890,
+      "last_frame": 1006,
+      "duration_frames": 117,
+      "duration_seconds": 4.88,
+      "hit_count": 78,
+      "hit_ratio": 0.667,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 26,
+      "first_frame": 978,
+      "last_frame": 998,
+      "duration_frames": 21,
+      "duration_seconds": 0.88,
+      "hit_count": 14,
+      "hit_ratio": 0.667,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 27,
+      "first_frame": 985,
+      "last_frame": 990,
+      "duration_frames": 6,
+      "duration_seconds": 0.25,
+      "hit_count": 6,
+      "hit_ratio": 1.0,
+      "is_confirmed": true
+    },
+    {
+      "track_id": 28,
+      "first_frame": 1005,
+      "last_frame": 1005,
+      "duration_frames": 1,
+      "duration_seconds": 0.04,
+      "hit_count": 1,
+      "hit_ratio": 1.0,
+      "is_confirmed": false
+    },
+    {
+      "track_id": 29,
+      "first_frame": 1009,
+      "last_frame": 1440,
+      "duration_frames": 432,
+      "duration_seconds": 18.0,
+      "hit_count": 429,
+      "hit_ratio": 0.993,
+      "is_confirmed": true
+    }
+  ]
+}
