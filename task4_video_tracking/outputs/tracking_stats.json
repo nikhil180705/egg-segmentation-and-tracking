@@ -1,0 +1,12 @@
+{
+  "video": "data\\videos\\raw\\nosh_eggs.mp4",
+  "output": "task4_video_tracking\\outputs\\tracked_eggs.mp4",
+  "total_frames": 1440,
+  "processed_frames": 1440,
+  "total_detections": 1853,
+  "avg_detections_per_frame": 1.29,
+  "total_unique_tracks": 29,
+  "max_simultaneous_eggs": 4,
+  "processing_time_s": 27.1,
+  "fps_achieved": 53.14
+}
