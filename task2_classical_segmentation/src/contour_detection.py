@@ -1,21 +1,15 @@
 """
 task2_classical_segmentation/src/contour_detection.py
 =====================================================
-Contour detection and filtering for individual egg identification.
+Contour detection and geometric filtering for egg identification.
 
-After morphological cleaning, connected foreground regions are identified
-as contours. Each contour is a candidate egg.
-
-Filtering criteria based on egg geometry:
-- Area: Eliminates very small debris and very large false positives
-- Circularity: Eggs are approximately elliptical (circularity > 0.25)
-- Solidity: Eggs are convex (solidity > 0.65)
-- Aspect ratio: Eggs are not extremely elongated (0.4 < AR < 2.5)
-
-Touching egg handling:
-When two eggs touch, they form a single merged contour. The watershed
-algorithm (in morphology.py) handles this case by separating touching objects
-using distance transform peaks.
+Filters candidate regions using:
+- Area (eliminates small noise artifacts and massive dishes/cookware/tables)
+- Aspect ratio (eggs have natural elongation; eliminates thin lines)
+- Circularity (eggs are elliptical; eliminates jagged, sprawling background blobs)
+- Solidity (eggs are convex; eliminates concave dishes, bowls, and hollow shadows)
+- Convexity & Bounding-box dimensions
+- Border contact safeguards (rejects background frames touching 3 or 4 borders)
 """
 
 from typing import Dict, List, Optional, Tuple
@@ -30,25 +24,16 @@ logger = get_logger(__name__)
 
 
 def find_contours(mask: np.ndarray) -> List[np.ndarray]:
-    """
-    Find external contours in a binary mask.
-
-    Parameters
-    ----------
-    mask : np.ndarray
-        Binary mask uint8.
-
-    Returns
-    -------
-    list of np.ndarray
-        List of contours (each is array of (x, y) points).
-    """
+    """Find external contours in a binary mask."""
     binary = ensure_binary_uint8(mask)
     contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     return list(contours)
 
 
-def compute_contour_features(contour: np.ndarray) -> Dict:
+def compute_contour_features(
+    contour: np.ndarray,
+    image_shape: Optional[Tuple[int, int]] = (640, 640),
+) -> Dict:
     """
     Compute geometric features of a contour for egg filtering.
 
@@ -56,12 +41,15 @@ def compute_contour_features(contour: np.ndarray) -> Dict:
     ----------
     contour : np.ndarray
         Single contour array from cv2.findContours.
+    image_shape : (H, W), optional
+        Dimensions for border contact evaluation.
 
     Returns
     -------
     dict with keys:
         area, perimeter, circularity, solidity, aspect_ratio,
-        bounding_box (x, y, w, h), centroid (cx, cy)
+        bounding_box (x, y, w, h), centroid (cx, cy),
+        border_touches, touches_left, touches_top, touches_right, touches_bottom
     """
     area = cv2.contourArea(contour)
     perimeter = cv2.arcLength(contour, closed=True)
@@ -78,13 +66,21 @@ def compute_contour_features(contour: np.ndarray) -> Dict:
     x, y, w, h = cv2.boundingRect(contour)
     aspect_ratio = float(w) / h if h > 0 else 0.0
 
-    # Centroid via moments
+    # Centroid via spatial moments
     M = cv2.moments(contour)
     if M["m00"] > 0:
         cx = M["m10"] / M["m00"]
         cy = M["m01"] / M["m00"]
     else:
         cx, cy = x + w / 2, y + h / 2
+
+    # Border touches
+    img_h, img_w = (image_shape[0], image_shape[1]) if image_shape else (640, 640)
+    touches_left = (x <= 2)
+    touches_top = (y <= 2)
+    touches_right = (x + w >= img_w - 2)
+    touches_bottom = (y + h >= img_h - 2)
+    border_touches = int(touches_left + touches_top + touches_right + touches_bottom)
 
     return {
         "area": area,
@@ -94,17 +90,25 @@ def compute_contour_features(contour: np.ndarray) -> Dict:
         "aspect_ratio": aspect_ratio,
         "bounding_box": (x, y, w, h),
         "centroid": (cx, cy),
+        "border_touches": border_touches,
+        "touches_left": touches_left,
+        "touches_top": touches_top,
+        "touches_right": touches_right,
+        "touches_bottom": touches_bottom,
     }
 
 
 def is_egg_contour(
     features: Dict,
-    min_area: float = 2000,
-    max_area: float = 250000,
-    min_circularity: float = 0.25,
-    min_solidity: float = 0.65,
-    min_aspect_ratio: float = 0.4,
-    max_aspect_ratio: float = 2.5,
+    min_area: float = 1200,
+    max_area: float = 95000,
+    min_circularity: float = 0.35,
+    min_solidity: float = 0.78,
+    min_aspect_ratio: float = 0.45,
+    max_aspect_ratio: float = 2.30,
+    max_border_touch_count: int = 2,
+    max_border_touch_area: float = 45000,
+    **kwargs,
 ) -> Tuple[bool, str]:
     """
     Determine if a contour is a plausible egg based on geometric criteria.
@@ -120,7 +124,9 @@ def is_egg_contour(
     min_solidity : float
         Minimum solidity (0-1).
     min_aspect_ratio, max_aspect_ratio : float
-        Acceptable bounding box aspect ratio range.
+        Bounding box aspect ratio range.
+    max_border_touch_count : int
+        Maximum number of image borders touched before rejecting as background.
 
     Returns
     -------
@@ -146,12 +152,20 @@ def is_egg_contour(
     if ar < min_aspect_ratio or ar > max_aspect_ratio:
         return False, f"aspect_ratio_out_of_range({ar:.2f})"
 
+    # Border touch check
+    bt = features.get("border_touches", 0)
+    if bt >= 3:
+        return False, f"border_touches_too_high({bt}>=3)"
+    if bt >= max_border_touch_count and area > max_border_touch_area:
+        return False, f"large_border_touch({bt} borders, area={area:.0f})"
+
     return True, ""
 
 
 def filter_egg_contours(
     contours: List[np.ndarray],
     filter_params: Optional[Dict] = None,
+    image_shape: Optional[Tuple[int, int]] = (640, 640),
 ) -> Tuple[List[np.ndarray], List[Dict], List[Dict]]:
     """
     Filter contours to keep only egg candidates.
@@ -161,6 +175,7 @@ def filter_egg_contours(
     contours : list of np.ndarray
     filter_params : dict, optional
         Overrides for is_egg_contour() parameters.
+    image_shape : (H, W), optional
 
     Returns
     -------
@@ -169,7 +184,7 @@ def filter_egg_contours(
     egg_features : list of dict
         Features for each accepted contour.
     rejected : list of dict
-        Info about rejected contours (for debugging).
+        Info about rejected contours.
     """
     params = filter_params or {}
     egg_contours = []
@@ -177,7 +192,7 @@ def filter_egg_contours(
     rejected = []
 
     for contour in contours:
-        features = compute_contour_features(contour)
+        features = compute_contour_features(contour, image_shape=image_shape)
         accepted, reason = is_egg_contour(features, **params)
         if accepted:
             egg_contours.append(contour)
@@ -185,10 +200,6 @@ def filter_egg_contours(
         else:
             rejected.append({**features, "rejection_reason": reason})
 
-    logger.debug(
-        f"Contour filtering: {len(contours)} total -> {len(egg_contours)} eggs, "
-        f"{len(rejected)} rejected"
-    )
     return egg_contours, egg_features, rejected
 
 
@@ -196,19 +207,7 @@ def contours_to_masks(
     contours: List[np.ndarray],
     image_shape: Tuple[int, int],
 ) -> List[np.ndarray]:
-    """
-    Convert contour list to individual binary masks.
-
-    Parameters
-    ----------
-    contours : list of np.ndarray
-    image_shape : (H, W)
-
-    Returns
-    -------
-    list of np.ndarray
-        One binary mask per contour.
-    """
+    """Convert contour list to individual binary masks."""
     h, w = image_shape[:2]
     masks = []
     for contour in contours:
@@ -222,20 +221,9 @@ def contours_to_combined_mask(
     contours: List[np.ndarray],
     image_shape: Tuple[int, int],
 ) -> np.ndarray:
-    """
-    Draw all contours onto a single binary mask.
-
-    Parameters
-    ----------
-    contours : list of np.ndarray
-    image_shape : (H, W)
-
-    Returns
-    -------
-    np.ndarray
-        Combined binary mask.
-    """
+    """Draw all contours onto a single binary mask."""
     h, w = image_shape[:2]
     mask = np.zeros((h, w), dtype=np.uint8)
-    cv2.drawContours(mask, contours, -1, 255, thickness=cv2.FILLED)
+    if contours:
+        cv2.drawContours(mask, contours, -1, 255, thickness=cv2.FILLED)
     return mask

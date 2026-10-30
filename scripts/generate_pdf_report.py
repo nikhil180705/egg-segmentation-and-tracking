@@ -164,87 +164,87 @@ def build_pdf_report(output_pdf: Path = Path("reports/FINAL_SUBMISSION_REPORT.pd
         ],
         [
             Paragraph("Total Eggs Detected", table_cell_bold),
-            Paragraph("90 (Classical) / 429 (SAM)", table_cell),
-            Paragraph("27 (Classical) / 80 (SAM)", table_cell),
+            Paragraph("114 (Classical) / 429 (SAM)", table_cell),
+            Paragraph("21 (Classical) / 80 (SAM)", table_cell),
             Paragraph("Detections vs Pseudo-GT instances", table_cell),
         ],
         [
             Paragraph("Bipartite Matches (TP)", table_cell_bold),
-            Paragraph("<b>60 matches</b>", table_cell),
-            Paragraph("<b>20 matches</b>", table_cell),
+            Paragraph("<b>50 matches</b>", table_cell),
+            Paragraph("<b>6 matches</b>", table_cell),
             Paragraph("Hungarian assignment (IoU ≥ 0.25)", table_cell),
         ],
         [
             Paragraph("Unmatched Predictions (FP)", table_cell_bold),
-            Paragraph("30", table_cell),
-            Paragraph("7", table_cell),
+            Paragraph("64", table_cell),
+            Paragraph("15", table_cell),
             Paragraph("Classical false positives", table_cell),
         ],
         [
             Paragraph("Unmatched Reference (FN)", table_cell_bold),
-            Paragraph("369", table_cell),
-            Paragraph("60", table_cell),
+            Paragraph("379", table_cell),
+            Paragraph("74", table_cell),
             Paragraph("Missed on low-contrast backgrounds", table_cell),
         ],
         [
             Paragraph("Instance Precision (Macro)", table_cell_bold),
-            Paragraph("<b>59.28%</b> (median: 100%)", table_cell),
-            Paragraph("<b>61.36%</b> (median: 100%)", table_cell),
+            Paragraph("<b>27.04%</b> (median: 0.0%)", table_cell),
+            Paragraph("<b>11.74%</b> (median: 0.0%)", table_cell),
             Paragraph("Mean across per-image precisions", table_cell),
         ],
         [
             Paragraph("Instance Precision (Micro / Pooled)", table_cell_bold),
-            Paragraph("<b>66.67%</b> (60 / 90)", table_cell),
-            Paragraph("<b>74.07%</b> (20 / 27)", table_cell),
+            Paragraph("<b>43.86%</b> (50 / 114)", table_cell),
+            Paragraph("<b>28.57%</b> (6 / 21)", table_cell),
             Paragraph("Global pooled TP / (TP + FP)", table_cell),
         ],
         [
             Paragraph("Instance Recall (Macro)", table_cell_bold),
-            Paragraph("<b>15.97%</b> (median: 16.7%)", table_cell),
-            Paragraph("<b>30.73%</b> (median: 25.0%)", table_cell),
+            Paragraph("<b>11.75%</b> (median: 0.0%)", table_cell),
+            Paragraph("<b>6.33%</b> (median: 0.0%)", table_cell),
             Paragraph("Mean across per-image recalls", table_cell),
         ],
         [
             Paragraph("Instance Recall (Micro / Pooled)", table_cell_bold),
-            Paragraph("<b>13.99%</b> (60 / 429)", table_cell),
-            Paragraph("<b>25.00%</b> (20 / 80)", table_cell),
+            Paragraph("<b>11.66%</b> (50 / 429)", table_cell),
+            Paragraph("<b>7.50%</b> (6 / 80)", table_cell),
             Paragraph("Global pooled TP / (TP + FN)", table_cell),
         ],
         [
             Paragraph("Instance F1 (Macro / Micro)", table_cell_bold),
-            Paragraph("<b>24.07%</b> (Mac) / <b>23.12%</b> (Mic)", table_cell),
-            Paragraph("<b>36.76%</b> (Mac) / <b>37.38%</b> (Mic)", table_cell),
+            Paragraph("<b>15.18%</b> (Mac) / <b>18.42%</b> (Mic)", table_cell),
+            Paragraph("<b>7.54%</b> (Mac) / <b>11.88%</b> (Mic)", table_cell),
             Paragraph("Harmonic mean of precision & recall", table_cell),
         ],
         [
             Paragraph("Mean Matched Instance IoU", table_cell_bold),
-            Paragraph("<b>0.3784</b> (median: 0.3413)", table_cell),
-            Paragraph("<b>0.4008</b> (median: 0.4703)", table_cell),
+            Paragraph("<b>0.2201</b> (max: 0.9227)", table_cell),
+            Paragraph("<b>0.1200</b> (max: 0.8332)", table_cell),
             Paragraph("Boundary quality on true positives", table_cell),
         ],
         [
             Paragraph("Pixel Precision (Macro / Micro)", table_cell_bold),
-            Paragraph("<b>57.49%</b> / <b>62.88%</b>", table_cell),
-            Paragraph("<b>53.33%</b> / <b>59.07%</b>", table_cell),
+            Paragraph("<b>41.15%</b> / <b>64.16%</b>", table_cell),
+            Paragraph("<b>30.27%</b> / <b>74.91%</b>", table_cell),
             Paragraph("Pixel-level positive predictive value", table_cell),
         ],
         [
             Paragraph("Pixel Recall (Macro / Micro)", table_cell_bold),
-            Paragraph("<b>35.27%</b> / <b>34.01%</b>", table_cell),
-            Paragraph("<b>39.87%</b> / <b>26.68%</b>", table_cell),
+            Paragraph("<b>12.88%</b> / <b>11.79%</b>", table_cell),
+            Paragraph("<b>5.19%</b> / <b>4.70%</b>", table_cell),
             Paragraph("Pixel-level sensitivity", table_cell),
         ],
         [
             Paragraph("Pixel IoU (Macro / Micro)", table_cell_bold),
-            Paragraph("<b>0.2781</b> / <b>0.2832</b>", table_cell),
-            Paragraph("<b>0.2686</b> / <b>0.2252</b>", table_cell),
-            Paragraph("Stable generalization (Δ < 0.010 IoU)", table_cell),
+            Paragraph("<b>0.1071</b> / <b>0.1107</b> (max: 0.8325)", table_cell),
+            Paragraph("<b>0.0481</b> / <b>0.0463</b> (max: 0.5934)", table_cell),
+            Paragraph("Mean intersection over union", table_cell),
         ],
         [
             Paragraph("Pixel Dice / F1 (Macro / Micro)", table_cell_bold),
-            Paragraph("<b>0.3857</b> / <b>0.4414</b>", table_cell),
-            Paragraph("<b>0.3638</b> / <b>0.3676</b>", table_cell),
-            Paragraph("Core foreground mask overlap", table_cell),
+            Paragraph("<b>0.1572</b> / <b>0.1994</b> (max: 0.9086)", table_cell),
+            Paragraph("<b>0.0709</b> / <b>0.0885</b> (max: 0.7448)", table_cell),
+            Paragraph("Harmonic mean of pixel precision/recall", table_cell),
         ],
         [
             Paragraph("Video Tracking Throughput", table_cell_bold),
@@ -309,19 +309,16 @@ def build_pdf_report(output_pdf: Path = Path("reports/FINAL_SUBMISSION_REPORT.pd
     # Section 4: Classical Ablation Experiments
     story.append(Paragraph("4. Classical Segmentation Empirical Experiment Log", h1_style))
     story.append(Paragraph(
-        "Ten distinct pipeline configurations were empirically tested and logged in <code>task2_classical_segmentation/experiments/experiment_log.csv</code>:",
+        "Sixteen distinct pipeline configurations were empirically tested and logged in <code>task2_classical_segmentation/experiments/experiment_log.csv</code>:",
         body_style
     ))
-    story.append(Paragraph("• <b>EXP001 (HSV Baseline)</b>: H:[0,179], S:[0,100], V:[120,255]. Detection rate: 45%. Established baseline; failed on white trays.", bullet_style))
-    story.append(Paragraph("• <b>EXP002 (Grayscale Otsu)</b>: Global Otsu. Detection rate: 97%. Retained as primary strategy due to high edge contrast.", bullet_style))
-    story.append(Paragraph("• <b>EXP003 (HSV + Otsu Union)</b>: Bitwise OR combination. Detection rate: 97%. Improved recall on shaded egg regions.", bullet_style))
-    story.append(Paragraph("• <b>EXP004 (Watershed Separation)</b>: Distance transform (dt=0.4*max). Adopted to cleanly split touching egg clusters.", bullet_style))
-    story.append(Paragraph("• <b>EXP005 (Tight HSV)</b>: S:[0,60], V:[150,255]. Rejected. Over-filtered shaded, beige, and brown eggs.", bullet_style))
-    story.append(Paragraph("• <b>EXP006 (Loose HSV)</b>: S:[0,150], V:[80,255]. Rejected. Flooded masks with wooden countertops and human skin tones.", bullet_style))
-    story.append(Paragraph("• <b>EXP007 (Large Closing 25x25)</b>: Rejected. Excessively bridged adjacent eggs into single super-contours.", bullet_style))
-    story.append(Paragraph("• <b>EXP008 (Low Min Area 500)</b>: Rejected. Admitted utensil tips and eggshell fragments.", bullet_style))
-    story.append(Paragraph("• <b>EXP009 (Relaxed Circularity 0.15)</b>: Adopted with shape safeguards to capture eggs viewed at oblique perspectives.", bullet_style))
-    story.append(Paragraph("• <b>EXP010 (Adaptive Gaussian Threshold)</b>: Rejected. Amplified high-frequency marble countertop texture noise.", bullet_style))
+    story.append(Paragraph("• <b>EXP001–EXP010 (Baseline Heuristics)</b>: Established initial HSV ranges, global Otsu, morphological operations, and adaptive thresholding baselines.", bullet_style))
+    story.append(Paragraph("• <b>EXP011 (Bilateral Filter + CLAHE)</b>: Bilateral (d=7, sigma=75) + CLAHE (clip=2.5) on L-channel. Preserves crisp eggshell boundaries while smoothing table grain.", bullet_style))
+    story.append(Paragraph("• <b>EXP012 (Chromaticity Gating)</b>: LAB a* < 125 (vegetation) and b* < 118 (blue dishware). 0 false positives on parsley, salads, and plastic bowls.", bullet_style))
+    story.append(Paragraph("• <b>EXP013 (Hierarchical Otsu for Dishes)</b>: Two-pass sub-thresholding for objects > 75k px. Isolates white eggs inside white plates and metal pans.", bullet_style))
+    story.append(Paragraph("• <b>EXP014 (Dual-Band Egg Color)</b>: Stream 1: White/cream (high L, low Sat); Stream 2: Brown/tan (warm amber b*). High chromatic specificity.", bullet_style))
+    story.append(Paragraph("• <b>EXP015 (Calibrated Geometry Filtering)</b>: Solidity ≥ 0.78, circularity ≥ 0.35, max border touch count ≤ 2. Eliminates 80% of border-touching false positives.", bullet_style))
+    story.append(Paragraph("• <b>EXP016 (Full Integrated Classical CV v3)</b>: Integrated production pipeline: 41.15% macro precision, 64.16% micro precision (Dev), 74.91% micro precision (Eval), 50 matched eggs.", bullet_style))
 
     # Section 5: Verification & Completion Status
     story.append(Spacer(1, 8))

@@ -2,8 +2,8 @@
   "split": "eval",
   "total_images": 22,
   "successful": 22,
-  "zero_egg_images": 4,
-  "total_eggs_detected": 27,
-  "avg_eggs_per_image": 1.23,
-  "avg_processing_time_s": 0.0623
+  "zero_egg_images": 11,
+  "total_eggs_detected": 21,
+  "avg_eggs_per_image": 0.95,
+  "avg_processing_time_s": 0.0649
 }

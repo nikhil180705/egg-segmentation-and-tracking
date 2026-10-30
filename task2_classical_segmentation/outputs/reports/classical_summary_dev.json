@@ -2,8 +2,8 @@
   "split": "dev",
   "total_images": 88,
   "successful": 88,
-  "zero_egg_images": 12,
-  "total_eggs_detected": 90,
-  "avg_eggs_per_image": 1.02,
-  "avg_processing_time_s": 0.0671
+  "zero_egg_images": 30,
+  "total_eggs_detected": 114,
+  "avg_eggs_per_image": 1.3,
+  "avg_processing_time_s": 0.0605
 }

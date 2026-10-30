@@ -76,6 +76,7 @@ def main() -> None:
                         image_path=Path(result["image_path"]),
                         masks=result["masks"],
                         output_dir=output_dir,
+                        processing_time_s=result.get("processing_time_s", 0.0),
                     )
                 except Exception as e:
                     logger.warning(f"Overlay failed for {result['image_name']}: {e}")

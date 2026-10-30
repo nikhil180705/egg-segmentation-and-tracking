@@ -7,83 +7,83 @@
   "iou_threshold": 0.25,
   "pixel_metrics": {
     "iou": {
-      "mean": 0.278067,
-      "std": 0.228989,
-      "median": 0.239999,
+      "mean": 0.10708,
+      "std": 0.177579,
+      "median": 0.004036,
       "min": 0.0,
-      "max": 0.760656
+      "max": 0.832455
     },
     "dice": {
-      "mean": 0.385691,
-      "std": 0.279093,
-      "median": 0.38709,
+      "mean": 0.157174,
+      "std": 0.229608,
+      "median": 0.008039,
       "min": 0.0,
-      "max": 0.86406
+      "max": 0.908568
     },
     "precision": {
-      "mean": 0.574932,
-      "std": 0.395462,
-      "median": 0.676699,
+      "mean": 0.411461,
+      "std": 0.451899,
+      "median": 0.067611,
       "min": 0.0,
       "max": 1.0
     },
     "recall": {
-      "mean": 0.352689,
-      "std": 0.274323,
-      "median": 0.322291,
+      "mean": 0.128827,
+      "std": 0.215371,
+      "median": 0.004037,
       "min": 0.0,
-      "max": 0.979478
+      "max": 1.0
     },
     "f1": {
-      "mean": 0.385691,
-      "std": 0.279093,
-      "median": 0.38709,
+      "mean": 0.157174,
+      "std": 0.229608,
+      "median": 0.008039,
       "min": 0.0,
-      "max": 0.86406
+      "max": 0.908568
     },
     "total_matched": 0,
     "total_unmatched_pred": 0,
     "total_unmatched_gt": 0,
     "total_count_pred": 0,
     "total_count_gt": 0,
-    "total_tp": 6085390,
-    "total_fp": 3592399,
-    "total_fn": 11807261,
-    "total_tn": 14559750
+    "total_tp": 2110754,
+    "total_fp": 1179120,
+    "total_fn": 15781897,
+    "total_tn": 16973029
   },
   "instance_metrics": {
     "instance_precision": {
-      "mean": 0.592803,
-      "std": 0.473981,
-      "median": 1.0,
+      "mean": 0.270428,
+      "std": 0.389022,
+      "median": 0.0,
       "min": 0.0,
       "max": 1.0
     },
     "instance_recall": {
-      "mean": 0.159678,
-      "std": 0.154582,
-      "median": 0.166667,
+      "mean": 0.117547,
+      "std": 0.180198,
+      "median": 0.0,
       "min": 0.0,
-      "max": 0.5
+      "max": 0.625
     },
     "instance_f1": {
-      "mean": 0.240687,
-      "std": 0.214637,
-      "median": 0.285714,
+      "mean": 0.151759,
+      "std": 0.22441,
+      "median": 0.0,
       "min": 0.0,
       "max": 0.666667
     },
     "mean_matched_iou": {
-      "mean": 0.378417,
-      "std": 0.345781,
-      "median": 0.341253,
+      "mean": 0.220114,
+      "std": 0.299334,
+      "median": 0.0,
       "min": 0.0,
-      "max": 0.980342
+      "max": 0.92273
     },
-    "total_matched": 60,
-    "total_unmatched_pred": 30,
-    "total_unmatched_gt": 369,
-    "total_count_pred": 90,
+    "total_matched": 50,
+    "total_unmatched_pred": 64,
+    "total_unmatched_gt": 379,
+    "total_count_pred": 114,
     "total_count_gt": 429,
     "total_tp": 0,
     "total_fp": 0,

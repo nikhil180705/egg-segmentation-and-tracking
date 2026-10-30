@@ -1,63 +1,81 @@
-# Classical Segmentation Configuration
+# Classical Segmentation Configuration (Improved v3)
 # Used by: task2_classical_segmentation/src/egg_segmenter.py
-
-# These are the FINAL tuned parameters after experiments on the development set.
-# See task2_classical_segmentation/experiments/experiment_log.csv for full history.
+# Calibrated to eliminate background surfaces, plates, pans, and vegetation false positives.
 
 preprocessing:
-  gaussian_blur_kernel: 5       # Must be odd; reduces noise before thresholding
-  gaussian_blur_sigma: 0        # 0 = auto-computed from kernel size
-  use_median_blur: false        # Alternative to Gaussian; better for salt-pepper noise
+  gaussian_blur_kernel: 5       # Must be odd; reduces noise
+  gaussian_blur_sigma: 0        # 0 = auto-computed
+  use_median_blur: false        # Alternative to Gaussian
   median_blur_kernel: 5
+  use_bilateral: true           # Edge-preserving noise reduction
+  bilateral_d: 7                # Pixel neighborhood diameter
+  bilateral_sigma_color: 50.0   # Color space filter sigma
+  bilateral_sigma_space: 50.0   # Coordinate space filter sigma
+  use_clahe: true               # Enhance local contrast for shadows / white-on-white
+  clahe_clip_limit: 2.5         # Contrast limit factor
+  clahe_tile_grid_size: [8, 8]  # Grid size for adaptive equalization
 
 color_space:
-  # Strategy: Convert to HSV; threshold the Value channel for lighting robustness
-  # Eggs appear as bright objects against variable backgrounds.
-  primary_space: "HSV"
-
-  # HSV thresholds (H: 0-179, S: 0-255, V: 0-255 in OpenCV)
-  hsv_lower: [0, 0, 120]        # Accepts eggs of any hue; min saturation/value
-  hsv_upper: [179, 100, 255]    # Low saturation (whitish/brownish eggs) + bright
+  primary_space: "LAB_HSV"
   use_hsv: true
-
-  # Grayscale + Otsu fallback for images where HSV fails
   use_otsu_fallback: true
-  otsu_block_size: null         # null = global Otsu (not adaptive)
+  use_adaptive: false
+  adaptive_block_size: 51
+  adaptive_C: -6
 
-  # Adaptive thresholding parameters (for variable lighting)
-  use_adaptive: false           # Enabled if global thresholding fails on dev set
-  adaptive_block_size: 21
-  adaptive_C: 5
+  # Non-egg chromaticity rejection (vegetation, blue dishes, dark shadows)
+  suppress_green: true
+  suppress_blue: true
+  suppress_deep_shadow: true
+
+  # Hierarchical Otsu for separating eggs from bright plates / pans / tables
+  use_hierarchical_otsu: true
+  hierarchical_area_threshold: 75000  # Sub-threshold components larger than this
+
+  # Dual-band egg chromaticity ranges
+  white_egg_min_L: 135
+  white_egg_max_S: 75
+  brown_egg_hsv_ranges:
+    h_lower1: 0
+    h_upper1: 32
+    h_lower2: 165
+    h_upper2: 179
+    s_min: 25
+    s_max: 175
+    v_min: 60
+    v_max: 220
 
 morphology:
-  # Morphological operations to clean up the binary mask
-  # Order: erode → dilate (opening) removes small noise
-  #        dilate → erode (closing) fills holes inside eggs
-  kernel_shape: "ellipse"       # Matches egg shape better than square
-  opening_kernel_size: 5        # Opening: remove small foreground blobs
-  opening_iterations: 2
-  closing_kernel_size: 15       # Closing: fill holes and gaps inside eggs
-  closing_iterations: 3
-  dilation_kernel_size: 3       # Final slight dilation to recover edges
+  kernel_shape: "ellipse"
+  opening_kernel_size: 5        # Removes small spurious noise blobs
+  opening_iterations: 1
+  closing_kernel_size: 15       # Fills internal holes from specular highlights
+  closing_iterations: 2
+  dilation_kernel_size: 3
   dilation_iterations: 1
+  fill_holes: true              # Flood fill enclosed interior voids
 
 contour_detection:
-  # Contour retrieval and filtering
-  retrieval_mode: "RETR_EXTERNAL"   # Only outer contours
+  retrieval_mode: "RETR_EXTERNAL"
   approximation: "CHAIN_APPROX_SIMPLE"
 
-  # Area filtering (pixels²) — calibrated on 640×640 images
-  min_contour_area: 2000        # Removes small debris
-  max_contour_area: 300000      # ~73% of 640x640; allows close-up egg shots
+  # Area filtering (pixels²) on 640x640 images
+  # Eliminates small debris (<1200) and huge plates/pans (>95000)
+  min_contour_area: 1200
+  max_contour_area: 95000
 
-  # Shape filtering
-  min_circularity: 0.15         # EXP009 winner: relaxed for elongated eggs
-  min_solidity: 0.55            # EXP009 winner: relaxed for convex-ish shapes
-  min_aspect_ratio: 0.3         # Wide range to handle any egg orientation
-  max_aspect_ratio: 3.0         # Up to 3:1 elongation
+  # Shape filtering calibrated for convex elliptical eggs
+  min_circularity: 0.35         # Rejects irregular / sprawling background blobs
+  min_solidity: 0.78            # Eggs are convex; rejects concave dishes/pans
+  min_aspect_ratio: 0.45        # Rejects extremely elongated slivers
+  max_aspect_ratio: 2.30
+
+  # Border contact safeguards
+  max_border_touch_count: 2     # Rejects background frames touching 3 or 4 borders
+  max_border_touch_area: 45000  # Rejects large objects touching 2 borders
 
 watershed:
-  # Watershed segmentation for separating touching/overlapping eggs
   use_watershed: true
-  distance_transform_threshold: 0.4  # Fraction of max distance for sure-foreground
-  min_sure_foreground_area: 500
+  use_per_component_watershed: true  # Watershed only applied to touching egg clusters
+  distance_transform_threshold: 0.40 # Distance transform peak fraction for seed markers
+  min_sure_foreground_area: 400      # Minimum area for valid watershed seed

@@ -4,17 +4,10 @@ task2_classical_segmentation/src/preprocessing.py
 Image preprocessing utilities specific to classical segmentation.
 
 Provides:
-- Gaussian and median blur for noise reduction
-- Color space conversions with proper channel ordering
+- Gaussian, median, and edge-preserving bilateral blur for noise reduction
+- Color space conversions with proper channel ordering (HSV, CIELAB, Grayscale)
 - CLAHE (Contrast Limited Adaptive Histogram Equalization) for lighting normalization
-- Image quality checks
-
-Design rationale:
-Preprocessing is the most critical step in classical CV segmentation. Poor
-preprocessing cascades errors through every subsequent step. For eggs:
-- Gaussian blur reduces JPEG compression artifacts without destroying edges
-- HSV conversion enables hue-independent brightness thresholding
-- CLAHE helps with variable lighting (dark shadows vs bright highlights)
+- Shadow and uneven illumination mitigation
 """
 
 from typing import Optional, Tuple
@@ -56,7 +49,7 @@ def apply_gaussian_blur(
 
 def apply_median_blur(img: np.ndarray, kernel_size: int = 5) -> np.ndarray:
     """
-    Apply median blur (better than Gaussian for salt-and-pepper noise).
+    Apply median blur (effective for salt-and-pepper noise).
 
     Parameters
     ----------
@@ -73,6 +66,37 @@ def apply_median_blur(img: np.ndarray, kernel_size: int = 5) -> np.ndarray:
     return cv2.medianBlur(img, kernel_size)
 
 
+def apply_bilateral_filter(
+    img: np.ndarray,
+    d: int = 7,
+    sigma_color: float = 50.0,
+    sigma_space: float = 50.0,
+) -> np.ndarray:
+    """
+    Apply bilateral filter for edge-preserving noise reduction.
+
+    Smooths flat egg shell texture and image sensor noise while preserving
+    sharp outer egg contours.
+
+    Parameters
+    ----------
+    img : np.ndarray
+        Input image (grayscale or color).
+    d : int
+        Diameter of each pixel neighborhood.
+    sigma_color : float
+        Filter sigma in the color space.
+    sigma_space : float
+        Filter sigma in the coordinate space.
+
+    Returns
+    -------
+    np.ndarray
+        Edge-preserved filtered image.
+    """
+    return cv2.bilateralFilter(img, d, sigma_color, sigma_space)
+
+
 def to_hsv(img_bgr: np.ndarray) -> np.ndarray:
     """Convert BGR image to HSV color space."""
     return cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
@@ -87,7 +111,10 @@ def to_lab(img_bgr: np.ndarray) -> np.ndarray:
     """
     Convert BGR image to CIELAB color space.
 
-    LAB is perceptually uniform; useful for detecting subtle color differences.
+    LAB is perceptually uniform:
+    - L: Luminance (0-255 in uint8)
+    - a*: Green (-128) to Red (+127)
+    - b*: Blue (-128) to Yellow (+127)
     """
     return cv2.cvtColor(img_bgr, cv2.COLOR_BGR2LAB)
 
@@ -100,7 +127,8 @@ def apply_clahe(
     """
     Apply CLAHE (Contrast Limited Adaptive Histogram Equalization).
 
-    Improves local contrast, especially useful for images with uneven lighting.
+    Improves local contrast, especially useful for images with uneven lighting,
+    cast shadows, and subtle egg-to-background contrast.
 
     Parameters
     ----------
