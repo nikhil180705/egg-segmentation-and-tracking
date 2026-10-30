@@ -48,13 +48,13 @@ contour_detection:
 
   # Area filtering (pixels²) — calibrated on 640×640 images
   min_contour_area: 2000        # Removes small debris
-  max_contour_area: 250000      # Removes image-filling false positives
+  max_contour_area: 300000      # ~73% of 640x640; allows close-up egg shots
 
   # Shape filtering
-  min_circularity: 0.25         # Eggs are approximately elliptical
-  min_solidity: 0.65            # Must be convex-ish
-  min_aspect_ratio: 0.4         # Width/height; eggs can be oriented any direction
-  max_aspect_ratio: 2.5
+  min_circularity: 0.15         # EXP009 winner: relaxed for elongated eggs
+  min_solidity: 0.55            # EXP009 winner: relaxed for convex-ish shapes
+  min_aspect_ratio: 0.3         # Wide range to handle any egg orientation
+  max_aspect_ratio: 3.0         # Up to 3:1 elongation
 
 watershed:
   # Watershed segmentation for separating touching/overlapping eggs

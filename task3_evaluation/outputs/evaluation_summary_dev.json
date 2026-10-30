@@ -1,0 +1,93 @@
+{
+  "split": "dev",
+  "total_images": 88,
+  "sam_masks_found": 88,
+  "classical_masks_found": 88,
+  "errors": 0,
+  "iou_threshold": 0.25,
+  "pixel_metrics": {
+    "iou": {
+      "mean": 0.278067,
+      "std": 0.228989,
+      "median": 0.239999,
+      "min": 0.0,
+      "max": 0.760656
+    },
+    "dice": {
+      "mean": 0.385691,
+      "std": 0.279093,
+      "median": 0.38709,
+      "min": 0.0,
+      "max": 0.86406
+    },
+    "precision": {
+      "mean": 0.574932,
+      "std": 0.395462,
+      "median": 0.676699,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "recall": {
+      "mean": 0.352689,
+      "std": 0.274323,
+      "median": 0.322291,
+      "min": 0.0,
+      "max": 0.979478
+    },
+    "f1": {
+      "mean": 0.385691,
+      "std": 0.279093,
+      "median": 0.38709,
+      "min": 0.0,
+      "max": 0.86406
+    },
+    "total_matched": 0,
+    "total_unmatched_pred": 0,
+    "total_unmatched_gt": 0,
+    "total_count_pred": 0,
+    "total_count_gt": 0,
+    "total_tp": 6085390,
+    "total_fp": 3592399,
+    "total_fn": 11807261,
+    "total_tn": 14559750
+  },
+  "instance_metrics": {
+    "instance_precision": {
+      "mean": 0.592803,
+      "std": 0.473981,
+      "median": 1.0,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "instance_recall": {
+      "mean": 0.159678,
+      "std": 0.154582,
+      "median": 0.166667,
+      "min": 0.0,
+      "max": 0.5
+    },
+    "instance_f1": {
+      "mean": 0.240687,
+      "std": 0.214637,
+      "median": 0.285714,
+      "min": 0.0,
+      "max": 0.666667
+    },
+    "mean_matched_iou": {
+      "mean": 0.378417,
+      "std": 0.345781,
+      "median": 0.341253,
+      "min": 0.0,
+      "max": 0.980342
+    },
+    "total_matched": 60,
+    "total_unmatched_pred": 30,
+    "total_unmatched_gt": 369,
+    "total_count_pred": 90,
+    "total_count_gt": 429,
+    "total_tp": 0,
+    "total_fp": 0,
+    "total_fn": 0,
+    "total_tn": 0
+  }
+}
