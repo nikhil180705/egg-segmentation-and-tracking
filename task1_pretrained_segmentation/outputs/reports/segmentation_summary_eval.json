@@ -1,0 +1,12 @@
+{
+  "model": "sam_vit_b",
+  "variant": "vit_b",
+  "strategy": "auto",
+  "split": "eval",
+  "total_images": 22,
+  "successful": 22,
+  "errors": 0,
+  "zero_egg_images": 0,
+  "total_eggs_detected": 80,
+  "avg_processing_time_s": 29.492
+}
