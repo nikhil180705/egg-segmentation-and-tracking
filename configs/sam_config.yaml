@@ -1,0 +1,49 @@
+# SAM (Segment Anything Model) configuration
+# Used by: task1_pretrained_segmentation/src/model_loader.py
+
+model:
+  # Model variant selection rationale:
+  # - vit_h (2.4GB): Best quality; exceeds RTX 2050 4GB VRAM when combined with overhead
+  # - vit_l (1.2GB): High quality; borderline for 4GB VRAM
+  # - vit_b (375MB): Good quality; comfortably fits RTX 2050 4GB VRAM → SELECTED
+  name: "sam_vit_b"
+  variant: "vit_b"
+  checkpoint_filename: "sam_vit_b_01ec64.pth"
+  checkpoint_url: "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth"
+  checkpoints_dir: "checkpoints"
+
+inference:
+  device: "auto"  # "auto" detects CUDA; falls back to CPU
+  # Prompting strategy (evaluated experimentally):
+  # "auto" = automatic mask generation (AMG) — all masks, filter for eggs
+  # "bbox" = bounding-box prompts derived from contour detection
+  # "grid_point" = regular grid of point prompts, filter by score
+  # Decision: Start with "auto" → inspect quality → switch to "bbox" if needed
+  prompting_strategy: "auto"
+
+  # Automatic Mask Generator parameters (used when prompting_strategy == "auto")
+  amg:
+    points_per_side: 32           # Grid density; higher = more masks but slower
+    pred_iou_thresh: 0.88         # Predicted IoU threshold (0-1); filters weak masks
+    stability_score_thresh: 0.95  # Mask stability; filters noisy masks
+    crop_n_layers: 1              # Multi-scale cropping layers
+    crop_n_points_downscale_factor: 2
+    min_mask_region_area: 500     # Pixels; remove tiny spurious masks
+
+  # Egg-specific filtering thresholds applied AFTER SAM generation
+  egg_filter:
+    min_area_ratio: 0.01     # Minimum fraction of image area a valid mask must occupy
+    max_area_ratio: 0.95     # Maximum fraction (whole-image masks are background)
+    min_circularity: 0.3     # Eggs are elliptical: circularity = 4π·area/perimeter²
+    max_circularity: 1.1     # Allow slightly > 1.0 due to discrete contour measurement
+    min_solidity: 0.7        # solid_area / convex_hull_area; eggs are convex
+
+  # Batch/chunk processing to manage GPU memory on RTX 2050
+  batch_size: 1              # Process one image at a time for 4GB VRAM safety
+
+output:
+  save_binary_masks: true
+  save_overlays: true
+  save_individual_masks: true   # One PNG per egg mask
+  overlay_alpha: 0.4
+  mask_color_seed: 42          # For reproducible random colors per mask

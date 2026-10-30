@@ -1,0 +1,47 @@
+# Tracking Configuration
+# Used by: task4_video_tracking/src/tracker.py, video_processor.py
+
+video:
+  input_path: "data/task4_video.mp4"   # Downloaded from YouTube
+  output_path: "task4_video_tracking/outputs/egg_tracking_annotated.mp4"
+  sample_output_path: "task4_video_tracking/outputs/sample_tracking.mp4"
+
+  # Processing parameters
+  target_fps: null      # null = use original FPS
+  max_frames: null      # null = process entire video
+  resize_width: null    # null = keep original resolution
+  start_frame: 0
+  end_frame: null
+
+tracker:
+  # Algorithm: Centroid-based tracking with Hungarian assignment
+  # Rationale: Simple, explainable, no neural overhead, works well for
+  # relatively slow-moving eggs with stable appearance.
+  algorithm: "centroid_hungarian"
+
+  # Maximum distance (pixels) between centroids across frames for association
+  # Calibrated for typical egg movement speed in the video
+  max_centroid_distance: 80
+
+  # Number of frames a track can go unmatched before being deregistered
+  max_disappeared: 30   # ~1 second at 30fps
+
+  # Minimum consecutive frames to confirm a new track (reduces spurious IDs)
+  min_confirm_frames: 3
+
+  # Kalman filter (optional; enable if video has fast/erratic egg movement)
+  use_kalman: false
+
+visualization:
+  draw_masks: true
+  draw_contours: true
+  draw_centroids: true
+  draw_ids: true
+  draw_trajectories: true
+  trajectory_length: 30   # Number of past centroids to draw in trail
+  centroid_radius: 5
+  contour_thickness: 2
+  font_scale: 0.7
+  font_thickness: 2
+  id_color_seed: 42        # Reproducible random color per track ID
+  overlay_alpha: 0.35

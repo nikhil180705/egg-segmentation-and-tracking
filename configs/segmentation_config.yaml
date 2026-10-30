@@ -1,0 +1,63 @@
+# Classical Segmentation Configuration
+# Used by: task2_classical_segmentation/src/egg_segmenter.py
+
+# These are the FINAL tuned parameters after experiments on the development set.
+# See task2_classical_segmentation/experiments/experiment_log.csv for full history.
+
+preprocessing:
+  gaussian_blur_kernel: 5       # Must be odd; reduces noise before thresholding
+  gaussian_blur_sigma: 0        # 0 = auto-computed from kernel size
+  use_median_blur: false        # Alternative to Gaussian; better for salt-pepper noise
+  median_blur_kernel: 5
+
+color_space:
+  # Strategy: Convert to HSV; threshold the Value channel for lighting robustness
+  # Eggs appear as bright objects against variable backgrounds.
+  primary_space: "HSV"
+
+  # HSV thresholds (H: 0-179, S: 0-255, V: 0-255 in OpenCV)
+  hsv_lower: [0, 0, 120]        # Accepts eggs of any hue; min saturation/value
+  hsv_upper: [179, 100, 255]    # Low saturation (whitish/brownish eggs) + bright
+  use_hsv: true
+
+  # Grayscale + Otsu fallback for images where HSV fails
+  use_otsu_fallback: true
+  otsu_block_size: null         # null = global Otsu (not adaptive)
+
+  # Adaptive thresholding parameters (for variable lighting)
+  use_adaptive: false           # Enabled if global thresholding fails on dev set
+  adaptive_block_size: 21
+  adaptive_C: 5
+
+morphology:
+  # Morphological operations to clean up the binary mask
+  # Order: erode → dilate (opening) removes small noise
+  #        dilate → erode (closing) fills holes inside eggs
+  kernel_shape: "ellipse"       # Matches egg shape better than square
+  opening_kernel_size: 5        # Opening: remove small foreground blobs
+  opening_iterations: 2
+  closing_kernel_size: 15       # Closing: fill holes and gaps inside eggs
+  closing_iterations: 3
+  dilation_kernel_size: 3       # Final slight dilation to recover edges
+  dilation_iterations: 1
+
+contour_detection:
+  # Contour retrieval and filtering
+  retrieval_mode: "RETR_EXTERNAL"   # Only outer contours
+  approximation: "CHAIN_APPROX_SIMPLE"
+
+  # Area filtering (pixels²) — calibrated on 640×640 images
+  min_contour_area: 2000        # Removes small debris
+  max_contour_area: 250000      # Removes image-filling false positives
+
+  # Shape filtering
+  min_circularity: 0.25         # Eggs are approximately elliptical
+  min_solidity: 0.65            # Must be convex-ish
+  min_aspect_ratio: 0.4         # Width/height; eggs can be oriented any direction
+  max_aspect_ratio: 2.5
+
+watershed:
+  # Watershed segmentation for separating touching/overlapping eggs
+  use_watershed: true
+  distance_transform_threshold: 0.4  # Fraction of max distance for sure-foreground
+  min_sure_foreground_area: 500

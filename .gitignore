@@ -1,0 +1,90 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# PyTorch checkpoints (large model weights)
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+
+# Dataset files (download separately per README)
+data/raw/
+data/processed/
+data/dev/
+data/eval/
+# Keep data directory README
+!data/README.md
+!data/**/README.md
+
+# Video files (large)
+*.mp4
+*.avi
+*.mov
+*.mkv
+# Allow sample clips under 10MB in outputs
+!task4_video_tracking/outputs/sample_*.mp4
+
+# Generated outputs (large)
+task1_pretrained_segmentation/outputs/masks/
+task1_pretrained_segmentation/outputs/overlays/
+task2_classical_segmentation/outputs/
+task4_video_tracking/outputs/
+
+# Allow reports and figures
+!task1_pretrained_segmentation/outputs/reports/
+!task3_evaluation/results/metrics.csv
+!task3_evaluation/results/summary.json
+!task3_evaluation/results/figures/
+!reports/figures/
+
+# SAM model checkpoints
+*.pth
+checkpoints/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+*.swp
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs
+*.log
+logs/
+
+# Temp files
+*.tmp
+*.bak
+tmp/
+
+# CUDA cache
+.nv/
+
+# Pytest
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Matplotlib figure caches
+.matplotlib/

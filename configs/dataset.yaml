@@ -1,0 +1,50 @@
+# Dataset configuration for Nosh Robotics Egg Segmentation Project
+# Used by: shared/dataset_loader.py, scripts/download_dataset.py
+
+dataset:
+  name: "egg-vzhtr"
+  source: "roboflow"
+  workspace: "fire-bf7qe"
+  project: "egg-vzhtr"
+  version: 1
+  license: "CC BY 4.0"
+
+  # Google Drive alternative source
+  gdrive_file_id: "1a58rACcCFnaj0ZiDoNyGbDWXunRyWziv"
+
+  # Annotation type — IMPORTANT: classification only, no segmentation masks
+  annotation_type: "classification"
+  classes:
+    - "egg"
+  num_classes: 1
+
+# Dataset statistics (verified by inspection)
+statistics:
+  total_images_v1: 110
+  total_images_v2_v3: 160  # includes augmented
+  train_images: 77
+  valid_images: 22
+  test_images: 11
+
+# Our custom development/evaluation split
+# Applied AFTER downloading, using seed for reproducibility
+splitting:
+  random_seed: 42
+  dev_ratio: 0.80
+  eval_ratio: 0.20
+  strategy: "random"  # "group" if video-source frames detected; "random" otherwise
+  group_key: null     # set to "source_video" if near-duplicate groups found
+
+# Paths (relative to repository root)
+paths:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  dev_dir: "data/dev"
+  eval_dir: "data/eval"
+  split_manifest: "data/split_manifest.json"
+
+# Image preprocessing
+preprocessing:
+  target_size: null       # None = keep original aspect ratio; or [640, 640]
+  normalize: false        # Not needed for classical CV; done per-task
+  supported_formats: [".jpg", ".jpeg", ".png", ".bmp"]
