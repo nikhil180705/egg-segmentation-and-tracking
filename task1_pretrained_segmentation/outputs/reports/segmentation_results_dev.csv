@@ -1,0 +1,6 @@
+image_name,num_eggs,processing_time_s,strategy_used,image_shape,error
+not_damaged_101_jpg.rf.479d12a2b41a5ec6d718dcdabd14b0c9.jpg,2,25.021,auto,"(640, 640, 3)",
+not_damaged_102_jpg.rf.8d754cbc174c6cb6fb1b5c1929edcbb1.jpg,5,21.82,auto,"(640, 640, 3)",
+not_damaged_103_jpg.rf.c0bd961caec5acf3a6582c9cb2551634.jpg,4,21.232,auto,"(640, 640, 3)",
+not_damaged_106_jpg.rf.4ab043b322cc9e55bdf788a4d69ae74b.jpg,9,22.162,auto,"(640, 640, 3)",
+not_damaged_107_jpg.rf.8497e164672ad2319ef9ea157023304e.jpg,3,22.934,auto,"(640, 640, 3)",
