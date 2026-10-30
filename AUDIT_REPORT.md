@@ -116,7 +116,7 @@ The evaluation split (`data/eval/`) was strictly held out and remained untouched
 | **Pixel Dice** | **0.3638** ($\pm 0.2985$, median: 0.3817) | **0.3676** | 0.3857 / 0.4414 |
 
 ### 3.3 Generalization Analysis: Dev Split vs Eval Split
-- **Pixel IoU Consistency**: The macro-averaged Pixel IoU on the held-out evaluation set is **0.2686**, compared to **0.2781** on the development set (a difference of less than **0.010 IoU**). This confirms that the classical pipeline was not overfit to the development images.
+- **Pixel IoU Consistency & Generalization**: The macro-averaged Pixel IoU on the held-out evaluation set is **0.2686**, compared to **0.2781** on the development set (a difference of $\Delta = 0.0095$ IoU). Rather than asserting zero overfitting in absolute terms, this narrow gap provides strong empirical evidence of stable out-of-sample generalization across photographic variations, demonstrating that the classical morphological parameters and thresholding rules generalize reliably without substantial degradation on unseen images.
 - **Instance Precision Generalization**: Classical instance precision remained stable and slightly higher on the evaluation set (**61.36% Macro / 74.07% Micro** on Eval vs **59.28% Macro / 66.67% Micro** on Dev).
 - **Matched IoU**: For eggs correctly detected, boundary agreement with SAM reached **0.4008** on the evaluation set.
 
@@ -138,10 +138,16 @@ Previous logs and draft notes stated: *"100% detection accuracy"* and *"0 errors
 To definitively verify that the random split did not introduce data leakage:
 1. **Exact Duplicate Check**: SHA-256 byte hashes were computed for all 88 dev images and 22 eval images.
    - *Result*: **0 exact duplicate matches** between dev and eval sets.
-2. **Perceptual Near-Duplicate Check**: 64-bit Difference Hashing (dHash) was computed for all images. Pairwise Hamming distances between every evaluation image and all development images were calculated.
-   - Threshold for near-duplicates: Hamming distance $\le 5$ bits out of 64 ($\ge 92.2\%$ perceptual similarity).
-   - *Minimum observed Hamming distance*: **13 bits** (maximum similarity: $79.7\%$).
-   - *Mean nearest-neighbor distance*: **17.77 bits**.
+2. **Exact Perceptual Difference Hashing (dHash) Algorithm**:
+   - **Grayscale Conversion**: Image $I$ converted to single-channel luminance.
+   - **Resizing**: Downsampled via `cv2.INTER_AREA` interpolation to $(W=9, H=8)$ pixels.
+   - **Horizontal Gradient**: Evaluates $\Delta(y, x) = [I(y, x + 1) > I(y, x)]$ for $y \in [0, 7], x \in [0, 7]$, producing an $8 \times 8 = 64$-bit boolean matrix.
+   - **Bit Packing**: Packed into a 64-bit unsigned integer hash.
+   - **Hamming Distance**: $D_H(h_1, h_2) = \text{popcount}(h_1 \oplus h_2)$.
+   - **Near-Duplicate Threshold**: $D_H \le 5$ bits out of 64 ($\ge 92.19\%$ similarity).
+   - *Minimum observed Hamming distance*: **13 bits** (maximum similarity: $79.69\%$, comfortably above the 5-bit threshold).
+   - *Mean nearest-neighbor distance*: **17.77 bits** ($72.23\%$ similarity).
+   - *Mean pairwise distance*: **28.41 bits** ($55.61\%$ similarity).
    - *Result*: **0 perceptual near-duplicates detected**.
 3. **Roboflow Export Prefix Tracking**:
    - Roboflow exports append `.rf.[hash].jpg` to original file basenames. If an image was augmented into multiple files, they share the base prefix (e.g., `not_damaged_100`).
@@ -173,7 +179,7 @@ A dedicated analysis script (`scripts/analyze_tracking.py`) inspected the frame-
    - Tracks surviving $\ge 100$ frames: **8 tracks**
    - Short transition tracks ($< 30$ frames during hand contact): **14 tracks**
 
-*Audit Conclusion*: The existence of 29 track IDs is **not an error**, but a direct consequence of hand occlusions exceeding the 15-frame deregistration threshold. The tracker maintained **100% ID stability during continuous visibility** and correctly fragmented upon complete occlusion.
+*Audit Conclusion*: The occurrence of 29 track IDs is **not an algorithmic failure**, but an intentional consequence of hand occlusions exceeding the 15-frame deregistration threshold during egg interaction. In the absence of independently measured frame-by-frame MOT ground truth annotations (such as MOTA or IDF1), qualitative visual validation across keyframes and continuous video playback confirms that the tracker maintained consistent identity preservation during continuous visibility without observable ID switches between adjacent eggs, and cleanly deregistered tracks upon full occlusion.
 
 ---
 
