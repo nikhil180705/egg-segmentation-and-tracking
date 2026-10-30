@@ -42,18 +42,22 @@ data/eval/
 # Allow sample clips under 10MB in outputs
 !task4_video_tracking/outputs/sample_*.mp4
 
-# Generated outputs (large)
+# Generated outputs (large masks and raw videos)
 task1_pretrained_segmentation/outputs/masks/
 task1_pretrained_segmentation/outputs/overlays/
-task2_classical_segmentation/outputs/
-task4_video_tracking/outputs/
+task2_classical_segmentation/outputs/masks/
+task2_classical_segmentation/outputs/overlays/
+task4_video_tracking/outputs/*.mp4
 
-# Allow reports and figures
+# Allow reports, figures, and tracking logs
 !task1_pretrained_segmentation/outputs/reports/
-!task3_evaluation/results/metrics.csv
-!task3_evaluation/results/summary.json
-!task3_evaluation/results/figures/
-!reports/figures/
+!task1_pretrained_segmentation/outputs/reports/**
+!task2_classical_segmentation/outputs/reports/
+!task2_classical_segmentation/outputs/reports/**
+!task3_evaluation/outputs/
+!task3_evaluation/outputs/**
+!task4_video_tracking/outputs/*.json
+!task4_video_tracking/outputs/*.csv
 
 # SAM model checkpoints
 *.pth
